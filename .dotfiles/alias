@@ -1,0 +1,10 @@
+# Shortened names
+alias g=git
+alias v=vim
+alias gv=gvim
+
+# Open the current directory in the file manager
+alias e.="xdg-open ."
+
+# 'config' for dotfile revision control
+alias config="git --git-dir ~/..dotfiles/ --work-tree ~"
