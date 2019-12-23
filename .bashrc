@@ -139,4 +139,4 @@ ex ()
 }
 
 # Load aliases
-source .dotfiles/alias
+source $HOME/.dotfiles/alias
