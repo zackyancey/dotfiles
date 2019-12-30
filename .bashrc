@@ -140,3 +140,7 @@ ex ()
 
 # Load aliases
 source $HOME/.dotfiles/alias
+
+# Enable fancy prompt
+sbp_path=$HOME/.dotfiles/sbp
+source $HOME/.dotfiles/sbp/sbp.bash

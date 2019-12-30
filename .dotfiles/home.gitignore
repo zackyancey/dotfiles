@@ -1,3 +1,14 @@
+# ignore everything
 *
+# Except for the dotfiles directory
 !.dotfiles/
-!.dotfiles/*
+!.dotfiles/**
+
+# Don't ignore some things in config
+!.config/
+# But ignore most of them
+.config/*
+
+# Include the sbp configuration files
+!.config/sbp/
+!.config/sbp/**
