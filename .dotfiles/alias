@@ -8,3 +8,9 @@ alias e.="xdg-open ."
 
 # 'config' for dotfile revision control
 alias config="git --git-dir ~/..dotfiles/ --work-tree ~"
+
+# Make aliases work with sudo
+# Normally, only the first word of a command is checked for an alias. However,
+# if the first word is an alias and the expansion ends with a space, the second
+# word will be checked as well.
+alias sudo="sudo "
