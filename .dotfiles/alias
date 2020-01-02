@@ -1,10 +1,16 @@
 # Shortened names
 alias g=git
+alias gl="git log"
+alias gs="git status"
 alias v=vim
 alias gv=gvim
 
 # Open the current directory in the file manager
-alias e.="xdg-open ."
+if [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]]; then
+  alias e.="explorer .;:"
+else
+  alias e.="xdg-open ."
+fi
 
 # 'config' for dotfile revision control
 alias config="git --git-dir ~/..dotfiles/ --work-tree ~"
