@@ -13,7 +13,7 @@ else
 fi
 
 # 'config' for dotfile revision control
-alias config="git --git-dir ~/..dotfiles/ --work-tree ~"
+alias config="git --git-dir $HOME/..dotfiles/ --work-tree $HOME"
 
 # Make aliases work with sudo
 # Normally, only the first word of a command is checked for an alias. However,
