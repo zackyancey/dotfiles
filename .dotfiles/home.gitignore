@@ -1,9 +1,34 @@
+# home.gitignore
+#
+# This file is meant to be used as the gitignore file for
+# the dotfiles bare repo. It needs to be configured in 
+# the local git repo, eg:
+#
+# `$ config config --local core.excludesfile $HOME/.dotfiles/home.gitignore`
+#
+
+
 # ignore everything
 *
-# Except for the dotfiles directory
+
+############################################
+# .dotfiles
+# .dotfiles is mostly used, but the local
+# folder is ignored.
+############################################
 !.dotfiles/
 !.dotfiles/**
+# Ignore the local folder
+.dotfiles/local/*
+# But not the templates in the local folder
+!.dotfiles/local/templates
+!.dotfiles/local/templates/**
 
+############################################
+# .config
+# Config is ignored by default, but some
+# subdirectories may be included.
+############################################
 # Don't ignore some things in config
 !.config/
 # But ignore most of them

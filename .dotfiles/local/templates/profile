@@ -1,0 +1,8 @@
+#
+# Local profile
+#
+# This file is sourced in .profile
+
+# Set this variable to use a more basic prompt if sbp runs too slowly
+#export USE_BASIC_PROMPT=1
+ 
