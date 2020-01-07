@@ -161,10 +161,6 @@ else
   start_agent;
 fi
 
-if [[ -f "$HOME/.ssh/id-rsa" ]]; then
-  ssh-add "$HOME/.ssh/id-rsa"
-fi
-
 # Load aliases
 source $HOME/.dotfiles/alias
 
