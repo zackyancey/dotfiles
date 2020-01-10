@@ -165,11 +165,11 @@ fi
 source $HOME/.dotfiles/alias
 
 if [[ USE_BASIC_PROMPT -eq 1 ]]; then
+  # Enable simple prompt
+  source $HOME/.dotfiles/basic_prompt.bash
+else
   # Enable fancy prompt
   sbp_path=$HOME/.dotfiles/sbp
   source $HOME/.dotfiles/sbp/sbp.bash
-else
-  # Enable simple prompt
-  source $HOME/.dotfiles/basic_prompt.bash
 fi
 
