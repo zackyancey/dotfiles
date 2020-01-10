@@ -22,6 +22,9 @@ fi
 shopt -s expand_aliases
 alias config=`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias | sed -n 's/alias config="\(.*\)"$/\1/p'`
 
+# Make sure git isn't doing anything funny with line endings.
+config config --local core.autocrlf false
+
 # Sometimes files that didn't exist from the start end up staged, which messes
 # up checkout. Make sure no files are staged.
 config reset > /dev/null
