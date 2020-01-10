@@ -13,7 +13,17 @@ else
 fi
 
 # 'config' for dotfile revision control
-alias config="git --git-dir $HOME/..dotfiles/ --work-tree $HOME"
+export CONFIG_HOME=$HOME
+if uname -s | grep -qi "cygwin"; then
+  # If running on cygwin, we might be using the windows version of git (because
+  # cygwin's git performance with antivirus is often terrible). If we are, we
+  # need to use a different path.
+  if git --version | grep -qi "windows"; then
+    export CONFIG_HOME="$(cygpath -am $HOME)"
+  fi
+fi
+
+alias config="git --git-dir \"$CONFIG_HOME/..dotfiles\" --work-tree $CONFIG_HOME"
 
 # Make aliases work with sudo
 # Normally, only the first word of a command is checked for an alias. However,
