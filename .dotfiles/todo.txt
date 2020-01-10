@@ -1,0 +1,5 @@
+idempotent installer
+welcomer
+  config update info (x new commits, x days since fetch, untracked changes, etc.)
+  system updates
+add more of sbp's features to the basic prompt (just don't re-call bash)
