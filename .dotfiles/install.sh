@@ -34,7 +34,7 @@ if [[ -n $(config diff --name-only --diff-filter=d) ]]; then
 
   echo "Backing up existing config files in ~/config-backup"
   if [[ -d config-backup || -f config-backup ]]; then
-    echo "ERROR: I need to backup files to ~/config-backup, but it already exists. Delete or rename that folder."
+    echo "ERROR: I need to backup files to ~/config-backup, but it already exists. Please delete or rename that folder."
     finish 1
   fi
   mkdir -p config-backup
