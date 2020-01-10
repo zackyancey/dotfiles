@@ -51,6 +51,9 @@ config submodule update
 
 # Set the local repository to use the gitignore file in .dotfiles
 config config --local core.excludesfile .dotfiles/home.gitignore
+# Include git config from the repo in the global config file
+config config --global include.path=.dotfiles/include.gitconfig
+
 
 popd > /dev/null
 echo "Installation complete. Note that files like .profile, .bashrc, etc, may not take effect until you log in again or source them manually."

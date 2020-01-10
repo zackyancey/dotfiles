@@ -1,0 +1,102 @@
+# Git settings
+#
+# This file contains some global settings and aliases for git. It won't be
+# included in the settings on its own, you will need to run:
+#
+# git config include.path .dotfiles/include.gitconfig
+#
+# This should be run automatically in the install script
+
+[core]
+    # Enable horizontal scrolling in less
+    pager = less -S
+
+[submodule]
+    # Recurse submodules by default
+    recurse = true
+
+[diff]
+    # Highlight whitespace changes in diffs
+    wsErrorHighlight = all
+
+[push]
+	# When running `git push` with no refspec, always push to the
+	# upstream branch (even if that branch has a different name)
+	default = upstream
+
+[alias]
+    # Get the current branch name (not so useful in itself, but used in
+    # other aliases)
+    branch-name = "!git rev-parse --abbrev-ref HEAD"
+	upstream-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}"
+
+    # Update all submodules to the tip of their tracking branches
+    ups = submodule update --recursive --remote
+
+    # Hide - ignore changes to a file that was previously committed
+	# (local-only change). Note: I may want to look into using
+	# --skip-worktree instead
+	hide = update-index --assume-unchanged
+	unhide = update-index --no-assume-unchanged
+	unhide-all = update-index --really-refresh
+
+	# List categories of files
+	hidden = "!f(){ git -C \"$GIT_PREFIX\" ls-files -v \"$@\" | grep \"^[a-z]\";}; f"
+	ignored = "!f(){ git -C \"$GIT_PREFIX\" status -s --ignored \"$@\" | grep \"^!!\";}; f"
+    untracked = "ls-files --others --exclude-standard"
+
+    # Push the current branch to the remote "origin", and set it to track
+    # the upstream branch
+    publish = "!git push --set-upstream origin $(git branch-name)"
+
+	# re-commit onto the last commit
+	recommit = "!git commit --amend --no-edit"
+
+	# See how far ahead or behind this branch is
+	ahead = "!git rev-list --count --right-only "$1"...HEAD"
+	behind = "!git rev-list --count --left-only "$1"...HEAD"
+	ahead-remote = "!git rev-list --count --right-only $(git upstream-branch)...HEAD"
+	behind-remote = "!git rev-list --count --left-only $(git upstream-branch)...HEAD"
+    
+    # Get off the current branch, delete it, and optionally go to a new one
+    jettison = "!f(){ \n\
+        local OLD_BRANCH=\"$(git branch-name)\"                                 \n\
+        [ \"$OLD_BRANCH\" == HEAD ] && echo Nothing to jettison && return 0     \n\
+        git checkout --detach > /dev/null                                       \n\
+        git checkout $1                                                         \n\
+        git branch ${2:-'-d'} $OLD_BRANCH  || (                                 \
+            git checkout $OLD_BRANCH                                            \
+            && echo \"If you're sure you want to delete $OLD_BRANCH, run 'git jettison $OLD_BRANCH -D'\" \
+            && return 1                                                         \
+        )  \n\
+    }; f"
+    
+    # Start a new branch based off of master
+    start = "!f(){ \n\
+        [ -z \"$1\" ] && echo Error: specify a branch to create && return 1 \n\
+        git rev-parse -q --verify \"$1\" > /dev/null \n\
+        [ $? -eq 0 ] && echo Error: \"$1\" already exists && return 1 \n\
+        local MASTER=$(git remote show origin | grep 'HEAD branch' | sed 's/.*: //') \
+        && git f                                                                     \
+        && git checkout origin/$MASTER                                               \
+        && git checkout -b $1;                                                       \
+    }; f"
+    
+    #jettison the current branch and start a new one
+    jstart = "!f() { git jettison origin/master ${2:-''} && git start $1; }; f"
+
+
+    # Abbreviations
+    pu = publish
+	ch = checkout
+	s = status
+    jt = jettison
+    js = jstart
+
+    # Shortcuts
+    unstage = reset HEAD --
+    f = fetch --all -p
+    dc = diff --cached
+    l = log --graph --abbrev-commit --decorate --format='format:%C(bold blue)%h%C(reset) %C(white)%<(70,trunc)%s%C(reset)%C(bold green)(%ar)%C(reset) %C(dim white)%<(10,trunc)%an%C(reset)%C(auto)%d%C(reset)' --branches --tags --remotes HEAD
+
+
