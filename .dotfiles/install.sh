@@ -6,21 +6,24 @@ function finish() {
 
 pushd $HOME > /dev/null
 
-# Create the bare repository
-if [[ USE_SSH -eq 1 ]]; then
-  git clone --bare git@github.com:zackyancey/dotfiles.git $HOME/..dotfiles
-else
-  git clone --bare https://github.com/zackyancey/dotfiles.git $HOME/..dotfiles
-fi
+if [[ ! -d ..dotfiles ]]; then
+  echo "Cloning dotfiles repo..."
+  # Create the bare repository
+  if [[ USE_SSH -eq 1 ]]; then
+    git clone --bare git@github.com:zackyancey/dotfiles.git $HOME/..dotfiles
+  else
+    git clone --bare https://github.com/zackyancey/dotfiles.git $HOME/..dotfiles
+  fi
 
-if [[ $? -ne 0 ]]; then
-  echo "ERROR: Couldn't clone repository."
-  finish 1
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR: Couldn't clone repository."
+    finish 1
+  fi
 fi
 
 # Get the `config` command
 shopt -s expand_aliases
-alias config=`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias | sed -n 's/alias config="\(.*\)"$/\1/p'`
+eval "`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias`"
 
 # Make sure git isn't doing anything funny with line endings.
 config config --local core.autocrlf false
@@ -41,7 +44,8 @@ if [[ -n $(config diff --name-only --diff-filter=d) ]]; then
     finish 1
   fi
   mkdir -p config-backup
-  config diff --name-only --diff-filter=d | xargs -I{} mv {} config-backup/{}
+  config diff --name-only --diff-filter=d | xargs -I{} sh -c 'mkdir -p config-backup/$(dirname {})' || (echo "Backing up a file failed)"; finish 1)
+  config diff --name-only --diff-filter=d | xargs -I{} mv {} config-backup/{} || (echo "Backing up a file failed)"; finish 1)
 fi
 
 # Check out the dotfiles
@@ -52,7 +56,7 @@ config submodule update
 # Set the local repository to use the gitignore file in .dotfiles
 config config --local core.excludesfile .dotfiles/home.gitignore
 # Include git config from the repo in the global config file
-config config --global include.path=.dotfiles/include.gitconfig
+git config --global include.path .dotfiles/include.gitconfig
 
 
 popd > /dev/null
