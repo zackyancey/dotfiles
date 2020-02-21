@@ -1,6 +1,7 @@
 #
 # ~/.bashrc
 #
+[[ -f $HOME/.profile ]] && source $HOME/.profile
 
 [[ $- != *i* ]] && return
 
@@ -172,4 +173,3 @@ else
   sbp_path=$HOME/.dotfiles/sbp
   source $HOME/.dotfiles/sbp/sbp.bash
 fi
-
