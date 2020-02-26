@@ -173,3 +173,5 @@ else
   sbp_path=$HOME/.dotfiles/sbp
   source $HOME/.dotfiles/sbp/sbp.bash
 fi
+
+source $HOME/.dotfiles/welcome.sh
