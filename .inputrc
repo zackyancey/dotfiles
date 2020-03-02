@@ -2,3 +2,5 @@ $include /etc/inputrc
 set completion-ignore-case On
 set colored-stats On
 set show-all-if-unmodified On
+\C-j menu-complete
+\C-k menu-complete-backward
