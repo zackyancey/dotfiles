@@ -29,6 +29,7 @@
     # other aliases)
     branch-name = "!git rev-parse --abbrev-ref HEAD"
 	upstream-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}"
+    origin-head = "!git symbolic-ref --short refs/remotes/origin/HEAD"
 
     # Update all submodules to the tip of their tracking branches
     ups = submodule update --recursive --remote
@@ -85,6 +86,9 @@
     #jettison the current branch and start a new one
     jstart = "!f() { git jettison origin/master ${2:-''} && git start $1; }; f"
 
+    # Rebase the current banch onto the latest master (or specified branch)
+    # And yes, I was just lookig for an excuse to make 'git gud' an alias.
+    gud = "!f() { git pull --rebase origin ${1:-`git origin-head | sed s:origin/::g`}; }; f"
 
     # Abbreviations
     pu = publish
@@ -97,6 +101,8 @@
     unstage = reset HEAD --
     f = fetch --all -p
     dc = diff --cached
-    l = log --graph --abbrev-commit --decorate --format='format:%C(bold blue)%h%C(reset) %C(white)%<(70,trunc)%s%C(reset)%C(bold green)(%ar)%C(reset) %C(dim white)%<(10,trunc)%an%C(reset)%C(auto)%d%C(reset)' --branches --tags --remotes HEAD
+    lg =  log --graph --abbrev-commit --decorate --format='format:%C(bold blue)%h%C(reset) %C(white)%<(70,trunc)%s%C(reset)%C(bold green)(%ar)%C(reset) %C(dim white)%<(10,trunc)%an%C(reset)%C(auto)%d%C(reset)' 
+    l = lg --branches --tags --remotes HEAD
+    ll = "!git lg HEAD `git origin-head`"
 
 
