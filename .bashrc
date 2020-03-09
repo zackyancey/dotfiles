@@ -165,9 +165,9 @@ fi
 # Load aliases
 source $HOME/.dotfiles/alias
 
-if [[ USE_BASIC_PROMPT -eq 1 ]]; then
+if [[ $USE_BASIC_PROMPT =~ "1" ]]; then
   # Enable simple prompt
-  source $HOME/.dotfiles/basic_prompt.bash
+  source $HOME/.dotfiles/basic_prompt.bash $USE_BASIC_PROMPT
 else
   # Enable fancy prompt
   sbp_path=$HOME/.dotfiles/sbp
