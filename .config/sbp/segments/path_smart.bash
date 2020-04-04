@@ -11,15 +11,14 @@ path_value=
 wdir=${PWD/${HOME}/\~}
 
 is_landmark () {
-  local dir="$1"
   # Any directory in /
-  if [[ $dir =~ ^/([^/]+)?$ ]]; then
-    landmark=$dir
+  if [[ "$dir" =~ ^/([^/]+)?$ ]]; then
+    landmark="$dir"
     return 0
   fi 
   # Any directory in ~
-  if [[ $dir =~ ^$HOME(/[^/]+)?$ ]]; then
-    landmark=${dir/${HOME}/\~}
+  if [[ "$dir" =~ ^$HOME(/[^/]+)?$ ]]; then
+    landmark="${dir/${HOME}/\~}"
     return 0
   fi 
 
@@ -28,8 +27,8 @@ is_landmark () {
   if [[ $? -eq 0 ]]
   then
     git_dir=`git -C "$dir" rev-parse --show-toplevel`
-    if [[ $dir == $git_dir ]]; then
-      landmark=$(basename $dir)
+    if [[ "$dir" == "$git_dir" ]]; then
+      landmark=$(basename "$dir")
       return 0
     fi
   fi
@@ -43,14 +42,13 @@ get_short_path () {
   #   * the root directory of a git repository
   #   * a directory in / or ~
   #   * / or ~
-  local wdir=$1
-  local dir=$wdir
+  local wdir="$1"
+  local dir="$wdir"
   local prevdir=""
   local landmark_levels=0
-
   until [[  "$dir" == "$prevdir" ]] # Give up if we end up in an endless loop
   do
-    is_landmark $dir && break
+    is_landmark "$dir" && break
     landmark_levels=$((landmark_levels + 1))
     prevdir=$dir
     dir="${dir%/*}"
@@ -59,13 +57,13 @@ get_short_path () {
 
   # Find the name of the current directory
   if [[ $landmark_levels -eq 0 ]]; then
-    short_path=$landmark
+    short_path="$landmark"
   elif [[ $landmark_levels -eq 1 ]]; then
-    short_path=$landmark/$(basename $wdir)
+    short_path=$landmark/$(basename "$wdir")
   else
-    short_path=$landmark$settings_path_skip_icon$(basename $wdir)
+    short_path=$landmark$settings_path_skip_icon$(basename "$wdir")
   fi
 }
 
-get_short_path $PWD
+get_short_path "$PWD"
 pretty_print_segment "$settings_path_color_primary" "$settings_path_color_secondary" "${short_path}" "$segment_direction"
