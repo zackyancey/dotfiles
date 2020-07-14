@@ -1,0 +1,8 @@
+# Cleanup key bindings. You can see what a key is by pressing ctrl-V and then
+# the key. See [https://bbs.archlinux.org/viewtopic.php?id=26110].
+bindkey "\e[H" beginning-of-line
+bindkey "\e[F" end-of-line
+bindkey "\e[3~" delete-char
+bindkey "\e[1;5C" forward-word
+bindkey "\e[1;5D" backward-word
+bindkey "^H" backward-delete-word
