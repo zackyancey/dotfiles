@@ -4,14 +4,23 @@
 fpath+=~/.zsh
 
 #######################################
+# Shell options
+#######################################
+# See [http://zsh.sourceforge.net/Intro/intro_16.html]
+setopt autocd               # Go to directories just by typing the name without cd
+setopt ignoreeof             # ctrl+D doesn't kill the shell
+setopt interactivecomments  # Allow comments in the shell
+setopt rcquotes             # '' -> ' in single-quote strings.
+
+#######################################
 # Prompt
 #######################################
 
 # Setup prompt [https://github.com/agkozak/agkozak-zsh-prompt]
-AGKOZAK_MULTILINE=1
+AGKOZAK_MULTILINE=0
 AGKOZAK_LEFT_PROMPT_ONLY=$AGKOZAK_MULTILINE
-AGKOZAK_PROMPT_CHAR=( λ Ω δ )
 AGKOZAK_CUSTOM_SYMBOLS=( '↕' '↓' '↑' '+' 'x' '!' '>' '?' '$')
+AGKOZAK_PROMPT_CHAR=( '%F{magenta}❯%f' '%F{red}❯%f' '%F{magenta}❮%f' )
 source $HOME/.zsh/agkozak-zsh-prompt/agkozak-zsh-prompt.plugin.zsh
 
 

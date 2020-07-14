@@ -1,3 +1,9 @@
+# Named directories.
+# Zsh allows you to create 'named directories' that can be used as shortcuts on
+# the command line. For example, the line below will let you use ~short in paths
+# anywhere in the zsh shell.
+# hash -d short=~/projects/shortcut_dir
+
 # Cleanup key bindings. You can see what a key is by pressing ctrl-V and then
 # the key. See [https://bbs.archlinux.org/viewtopic.php?id=26110].
 bindkey "\e[H" beginning-of-line
