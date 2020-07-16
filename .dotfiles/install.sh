@@ -23,7 +23,7 @@ fi
 
 # Get the `config` command
 shopt -s expand_aliases
-eval "`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias`"
+eval "`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias.sh`"
 
 # Make sure git isn't doing anything funny with line endings.
 config config --local core.autocrlf false
