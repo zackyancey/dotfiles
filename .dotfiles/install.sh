@@ -25,6 +25,9 @@ fi
 shopt -s expand_aliases
 eval "`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias.sh`"
 
+# Set up branches to fetch
+git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+
 # Make sure git isn't doing anything funny with line endings.
 config config --local core.autocrlf false
 
