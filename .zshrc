@@ -8,10 +8,10 @@ fpath+=~/.zsh
 #######################################
 # See [http://zsh.sourceforge.net/Intro/intro_16.html]
 setopt autocd               # Go to directories just by typing the name without cd
-setopt ignoreeof             # ctrl+D doesn't kill the shell
+setopt ignoreeof            # ctrl+D doesn't kill the shell
 setopt interactivecomments  # Allow comments in the shell
 setopt rcquotes             # '' -> ' in single-quote strings.
-
+bindkey -v                  # Enable vim mode
 #######################################
 # Prompt
 #######################################
