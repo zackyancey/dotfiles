@@ -23,5 +23,7 @@ else
   start_agent;
 fi
 
+[ -f $HOME/.dotfiles/local/shellrc.sh ] && source $HOME/.dotfiles/local/shellrc.sh
+
 # Print welcome message
 source $HOME/.dotfiles/welcome.sh
