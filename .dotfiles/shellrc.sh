@@ -1,3 +1,6 @@
+# Load the profile if it hasn't been loaded yet
+source $HOME/.profile
+
 # Load aliases
 source $HOME/.dotfiles/alias.sh
 
