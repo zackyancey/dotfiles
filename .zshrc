@@ -11,6 +11,8 @@ setopt autocd               # Go to directories just by typing the name without 
 setopt ignoreeof            # ctrl+D doesn't kill the shell
 setopt interactivecomments  # Allow comments in the shell
 setopt rcquotes             # '' -> ' in single-quote strings.
+setopt hist_ignore_dups     # Ignore consecutive duplicates in history
+setopt hist_ignore_all_dups # Ignore all duplicates in history
 bindkey -v                  # Enable vim mode
 #######################################
 # Prompt
