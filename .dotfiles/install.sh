@@ -62,6 +62,9 @@ config config --local core.excludesfile .dotfiles/home.gitignore
 # Include git config from the repo in the global config file
 git config --global include.path .dotfiles/include.gitconfig
 
+# Install zsh prompt
+mkdir $HOME/.zsh
+git clone https://github.com/agkozak/agkozak-zsh-prompt.git $HOME/.zsh/agkozak-zsh-prompt
 
 popd > /dev/null
 echo "Installation complete. Note that files like .profile, .bashrc, etc, may not take effect until you log in again or source them manually."
