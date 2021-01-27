@@ -94,3 +94,8 @@ colors() {
 		echo; echo
 	done
 }
+
+ssh-start() {
+	eval $(ssh-agent -s)
+	ssh-add ~/.ssh/id-rsa
+}
