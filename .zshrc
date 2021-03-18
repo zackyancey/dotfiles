@@ -52,6 +52,8 @@ zstyle ':completion:*' list-colors
 autoload -Uz compinit
 compinit
 
+autoload -Uz zmv
+
 #######################################
 # Other files
 #######################################
