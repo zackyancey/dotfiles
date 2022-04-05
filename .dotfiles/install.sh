@@ -23,7 +23,9 @@ fi
 
 # Get the `config` command
 shopt -s expand_aliases
-eval "`git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias.sh`"
+# The MSYS2_ARG_CONV_EXCL variable keeps msys from converting the path argument
+# to a windows path, which would make git not recognize it.
+eval "`MSYS2_ARG_CONV_EXCL="HEAD" git --git-dir ..dotfiles/ show HEAD:.dotfiles/alias.sh`"
 
 # Set up branches to fetch
 config config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
