@@ -1,6 +1,8 @@
 # Don't do anything if not running interactively
 [[ $- != *i* ]] && return
 
+source $HOME/.dotfiles/shellrc.sh
+
 fpath+=~/.zsh
 
 #######################################
@@ -62,4 +64,3 @@ if [ -f $HOME/.dotfiles/local/zshrc ]; then
   source $HOME/.dotfiles/local/zshrc
 fi
 
-source $HOME/.dotfiles/shellrc.sh
