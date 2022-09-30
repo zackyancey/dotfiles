@@ -64,6 +64,9 @@ config config --local core.excludesfile .dotfiles/home.gitignore
 # Include git config from the repo in the global config file
 git config --global include.path .dotfiles/include.gitconfig
 
+# Make sure that our version-controlled config file is inculded in the SSH config
+grep -qxF 'Include ~/.ssh/base_config' "$HOME"/.ssh/config || sed -i '1s;^;Include ~/.ssh/base_config\n;' "SHOME"/.ssh/config
+
 # Install zsh prompt
 mkdir $HOME/.zsh
 git clone https://github.com/agkozak/agkozak-zsh-prompt.git $HOME/.zsh/agkozak-zsh-prompt
