@@ -7,6 +7,9 @@
 #
 # This should be run automatically in the install script
 
+[merge]
+    conflictstyle = diff3
+
 [core]
     # Enable horizontal scrolling in less
     pager = less -S
