@@ -1,0 +1,116 @@
+#! /usr/bin/env python
+"""Helper script for compose-key related things."""
+import os
+from pathlib import Path
+import argparse
+from typing import List, Optional, Set
+from dataclasses import dataclass
+import re
+
+
+@dataclass
+class ComposeDef:
+    sequence: str
+    char: str
+    codepoint: Optional[str]
+    description: Optional[str]
+
+    @staticmethod
+    def from_line(line: str):
+        m = re.match(
+            r'(?P<sequence>(\s*<[^>]+>\s*)*):\s*"(?P<char>.+?)"(\s*(?P<codepoint>[^\s]*)\s*#\s*(?P<description>.*))?',
+            line,
+        )
+        assert m, line
+        sequence = m.group("sequence") or ""
+        char = m.group("char") or ""
+        codepoint = m.group("codepoint") or ""
+        description = m.group("description") or ""
+        return ComposeDef(
+            sequence=sequence.strip(),
+            char=char.strip(),
+            codepoint=codepoint.strip(),
+            description=description.strip(),
+        )
+    
+    def __str__(self) -> str:
+        return f'{self.sequence:70}: {self.char} {self.codepoint} # {self.description}'
+
+    def matches(self, query: re.Pattern[str]) -> bool:
+        return bool(
+            query.search(self.char)
+            or (self.codepoint is not None and query.search(self.codepoint))
+            or (self.description is not None and query.search(self.description.lower()))
+        )
+
+class ComposeDefs:
+    def __init__(self, *files: Path):
+        self.defs: List[ComposeDef] = []
+
+        for f in files:
+            self.add_file(f)
+
+    def add_file(self, f: Path):
+        seen_files: Set[Path] = set()
+        for line in open(f).readlines():
+            m = re.match(r'include\s*"(.*?)"\s*', line)
+            if m:
+                file = m.group(1)
+                file = file.replace("%L", str(get_locale_compose()))
+                file = file.replace("%H", "~")
+                file = Path(file).expanduser()
+                if file not in seen_files:
+                    seen_files.add(file)
+                    self.add_file(file)
+            elif line.lstrip().startswith("#") or len(line.strip()) == 0:
+                pass
+            else:
+                cd = ComposeDef.from_line(line)
+                self.defs.append(cd)
+
+    def search(self, pattern: re.Pattern[str]) -> List[ComposeDef]:
+        return [d for d in self.defs if d.matches(pattern)]
+
+
+def get_locale_compose() -> Path:
+    lang = os.environ["LANG"].split(".")[0]
+    return Path("/usr/share/X11/locale/{}.UTF-8/Compose".format(lang))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    subparsers = parser.add_subparsers(help="commands")
+    parser.set_defaults(fn=None)
+
+    search_parser = subparsers.add_parser("search", help="Search for a compose-key combination")
+    search_parser.add_argument("query")
+    search_parser.add_argument("-w", "--word", help="Match whole word", action="store_true")
+    search_parser.set_defaults(fn=main_search)
+
+    locale_parser = subparsers.add_parser(
+        "show-locale", help="print the path to the active locale's compose file"
+    )
+    locale_parser.set_defaults(fn=main_show_locale)
+
+    args = parser.parse_args()
+    if args.fn is None:
+        parser.print_help()
+        exit(1)
+    else:
+        args.fn(args)
+
+
+def main_show_locale(args: argparse.Namespace):
+    print(get_locale_compose())
+
+
+def main_search(args: argparse.Namespace):
+    if args.word:
+        args.query = r"\b" + args.query + r"\b"
+    pattern = re.compile(args.query, re.IGNORECASE)
+
+    for d in ComposeDefs(Path("~/.XCompose").expanduser()).search(pattern):
+        print(d)
+
+if __name__ == "__main__":
+    main()
