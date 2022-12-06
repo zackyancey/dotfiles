@@ -5,3 +5,7 @@
 
 # Set this variable to use a more basic prompt if sbp runs too slowly
 #export USE_BASIC_PROMPT=1
+
+# Set these to get the zsh prompt to always display the hostname
+# export SSH_CLIENT=localhost
+# export HOST=... # Optional: use a different host name
