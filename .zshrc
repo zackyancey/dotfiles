@@ -60,6 +60,11 @@ autoload -Uz zmv
 # Other files
 #######################################
 
+if type "fzf" > /dev/null ; then
+  source $HOME/.zsh/fzf/completion.zsh
+  source $HOME/.zsh/fzf/key-bindings.zsh
+fi
+
 if [ -f $HOME/.dotfiles/local/zshrc ]; then
   source $HOME/.dotfiles/local/zshrc
 fi

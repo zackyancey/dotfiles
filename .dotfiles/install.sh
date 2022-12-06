@@ -6,6 +6,7 @@ function finish() {
 
 pushd $HOME > /dev/null
 
+# Get the dotfiles repo
 if [[ ! -d ..dotfiles ]]; then
   echo "Cloning dotfiles repo..."
   # Create the bare repository
@@ -69,8 +70,13 @@ git config --global include.path .dotfiles/include.gitconfig
 grep -qxF 'Include ~/.ssh/base_config' "$HOME"/.ssh/config || sed -i '1s;^;Include ~/.ssh/base_config\n;' "$HOME"/.ssh/config
 
 # Install zsh prompt
-mkdir $HOME/.zsh
-git clone https://github.com/agkozak/agkozak-zsh-prompt.git $HOME/.zsh/agkozak-zsh-prompt
+mkdir -p $HOME/.zsh
+[[ -d "$HOME"/.zsh/agkozak-zsh-prompt ]] || git clone https://github.com/agkozak/agkozak-zsh-prompt.git $HOME/.zsh/agkozak-zsh-prompt
+
+# Download fzf completions
+mkdir -p $HOME/.zsh/fzf
+curl 'https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh' -o $HOME/.zsh/fzf/completion.zsh
+curl 'https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh' -o $HOME/.zsh/fzf/key-bindings.zsh
 
 popd > /dev/null
 echo "Installation complete. Note that files like .profile, .bashrc, etc, may not take effect until you log in again or source them manually."
