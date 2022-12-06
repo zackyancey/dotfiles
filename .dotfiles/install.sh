@@ -27,9 +27,6 @@ eval "`MSYS2_ARG_CONV_EXCL="HEAD" git --git-dir ..dotfiles/ show HEAD:.dotfiles/
 config config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 config fetch
 
-# Switch remote to ssh for any future pushes.
-config remote set-url origin git@github.com:zackyancey/dotfiles.git
-
 # Make sure git isn't doing anything funny with line endings.
 config config --local core.autocrlf false
 
@@ -57,6 +54,9 @@ fi
 config checkout -f
 config submodule init
 config submodule update
+
+# Switch remote to ssh for any future pushes.
+config remote set-url origin git@github.com:zackyancey/dotfiles.git
 
 # Set the local repository to use the gitignore file in .dotfiles
 config config --local core.excludesfile .dotfiles/home.gitignore
