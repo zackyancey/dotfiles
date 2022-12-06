@@ -9,12 +9,7 @@ pushd $HOME > /dev/null
 # Get the dotfiles repo
 if [[ ! -d ..dotfiles ]]; then
   echo "Cloning dotfiles repo..."
-  # Create the bare repository
-  if [[ USE_SSH -eq 1 ]]; then
-    git clone --bare git@github.com:zackyancey/dotfiles.git $HOME/..dotfiles
-  else
-    git clone --bare https://github.com/zackyancey/dotfiles.git $HOME/..dotfiles
-  fi
+  git clone --bare https://github.com/zackyancey/dotfiles.git $HOME/..dotfiles
 
   if [[ $? -ne 0 ]]; then
     echo "ERROR: Couldn't clone repository."
@@ -31,6 +26,9 @@ eval "`MSYS2_ARG_CONV_EXCL="HEAD" git --git-dir ..dotfiles/ show HEAD:.dotfiles/
 # Set up branches to fetch
 config config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 config fetch
+
+# Switch remote to ssh for any future pushes.
+config remote set-url origin git@github.com:zackyancey/dotfiles.git
 
 # Make sure git isn't doing anything funny with line endings.
 config config --local core.autocrlf false
