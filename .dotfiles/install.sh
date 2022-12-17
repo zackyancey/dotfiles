@@ -15,6 +15,10 @@ if [[ ! -d ..dotfiles ]]; then
     echo "ERROR: Couldn't clone repository."
     finish 1
   fi
+
+  CLONED_REPO=1
+else
+  CLONED_REPO=0
 fi
 
 # Get the `config` command
@@ -30,28 +34,32 @@ config fetch
 # Make sure git isn't doing anything funny with line endings.
 config config --local core.autocrlf false
 
-# Sometimes files that didn't exist from the start end up staged, which messes
-# up checkout. Make sure no files are staged.
-config reset > /dev/null
-if [[ -n $(config diff --name-only --diff-filter=d) ]]; then
-  # There are files in the worktree that will be overwritten by a checkout.
-  # Back them up.
-  echo "Existing config files found:"
-  config diff --name-only --diff-filter=d
-  echo
+# Only check out files if we just cloned the repo: Otherwise, leave whatever's
+# there
+if [[ $CLONED_REPO -eq 1 ]]; then
+  # Sometimes files that didn't exist from the start end up staged, which messes
+  # up checkout. Make sure no files are staged.
+  config reset > /dev/null
+  if [[ -n $(config diff --name-only --diff-filter=d) ]]; then
+    # There are files in the worktree that will be overwritten by a checkout.
+    # Back them up.
+    echo "Existing config files found:"
+    config diff --name-only --diff-filter=d
+    echo
 
-  echo "Backing up existing config files in ~/config-backup"
-  if [[ -d config-backup || -f config-backup ]]; then
-    echo "ERROR: I need to backup files to ~/config-backup, but it already exists. Please delete or rename that folder."
-    finish 1
+    echo "Backing up existing config files in ~/config-backup"
+    if [[ -d config-backup || -f config-backup ]]; then
+      echo "ERROR: I need to backup files to ~/config-backup, but it already exists. Please delete or rename that folder."
+      finish 1
+    fi
+    mkdir -p config-backup
+    config diff --name-only --diff-filter=d | xargs -I{} sh -c 'mkdir -p config-backup/$(dirname {})' || (echo "Backing up a file failed)"; finish 1)
+    config diff --name-only --diff-filter=d | xargs -I{} mv {} config-backup/{} || (echo "Backing up a file failed)"; finish 1)
   fi
-  mkdir -p config-backup
-  config diff --name-only --diff-filter=d | xargs -I{} sh -c 'mkdir -p config-backup/$(dirname {})' || (echo "Backing up a file failed)"; finish 1)
-  config diff --name-only --diff-filter=d | xargs -I{} mv {} config-backup/{} || (echo "Backing up a file failed)"; finish 1)
-fi
 
-# Check out the dotfiles
-config checkout -f
+  # Check out the dotfiles
+  config checkout -f
+fi
 config submodule init
 config submodule update
 
