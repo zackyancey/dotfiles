@@ -63,6 +63,19 @@ autoload -Uz zmv
 if type "fzf" > /dev/null ; then
   source $HOME/.zsh/fzf/completion.zsh
   source $HOME/.zsh/fzf/key-bindings.zsh
+  if type "fd" > /dev/null ; then
+    export FZF_CTRL_T_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
+    export FZF_ALT_C_COMMAND="fd -t d . --strip-cwd-prefix --hidden --follow --exclude .git"
+    _fzf_compgen_path() {
+      echo "$1"
+      command fd --type f --hidden --follow --exclude .git . "$1" \
+      | sed 's@^\./@@'
+    }
+    _fzf_compgen_dir() {
+       command fd --type d --hidden --follow --exclude .git . "$1" \
+       | sed 's@^\./@@'
+    }
+  fi
 fi
 
 if [ -f $HOME/.dotfiles/local/zshrc ]; then
