@@ -61,20 +61,16 @@
 	behind = "!git rev-list --count --left-only "$1"...HEAD"
 	ahead-remote = "!git rev-list --count --right-only $(git upstream-branch)...HEAD"
 	behind-remote = "!git rev-list --count --left-only $(git upstream-branch)...HEAD"
-    
+
     # Get off the current branch, delete it, and optionally go to a new one
     jettison = "!f(){ \n\
         local OLD_BRANCH=\"$(git branch-name)\"                                 \n\
-        [ \"$OLD_BRANCH\" == HEAD ] && echo Nothing to jettison && return 0     \n\
+        [ \"$OLD_BRANCH\" = "HEAD" ] && echo No branch checked out && return 0  \n\
         git checkout --detach > /dev/null                                       \n\
-        git checkout $1                                                         \n\
-        git branch ${2:-'-d'} $OLD_BRANCH  || (                                 \
-            git checkout $OLD_BRANCH                                            \
-            && echo \"If you're sure you want to delete $OLD_BRANCH, run 'git jettison $OLD_BRANCH -D'\" \
-            && return 1                                                         \
-        )  \n\
+        git branch -D $OLD_BRANCH                                               \n\
+        [ -z \"$1\" ] || git checkout $1                                        \n\
     }; f"
-    
+
     # Start a new branch based off of master
     start = "!f(){ \n\
         [ -z \"$1\" ] && echo Error: specify a branch to create && return 1 \n\
@@ -85,7 +81,7 @@
         && git checkout origin/$MASTER                                               \
         && git checkout -b $1;                                                       \
     }; f"
-    
+
     #jettison the current branch and start a new one
     jstart = "!f() { git jettison origin/master ${2:-''} && git start $1; }; f"
 
@@ -104,8 +100,6 @@
     unstage = reset HEAD --
     f = fetch --all -p
     dc = diff --cached
-    lg =  log --graph --abbrev-commit --decorate --format='format:%C(bold blue)%h%C(reset) %C(white)%<(70,trunc)%s%C(reset)%C(bold green)(%ar)%C(reset) %C(dim white)%<(10,trunc)%an%C(reset)%C(auto)%d%C(reset)' 
+    lg =  log --graph --abbrev-commit --decorate --format='format:%C(bold blue)%h%C(reset) %C(white)%<(70,trunc)%s%C(reset)%C(bold green)(%ar)%C(reset) %C(dim white)%<(10,trunc)%an%C(reset)%C(auto)%d%C(reset)'
     ll = lg --branches --tags --remotes HEAD
     l = "!git lg HEAD `git origin-head`"
-
-
