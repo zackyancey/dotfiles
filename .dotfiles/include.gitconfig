@@ -103,3 +103,5 @@
     lg =  log --graph --abbrev-commit --decorate --format='format:%C(bold blue)%h%C(reset) %C(white)%<(70,trunc)%s%C(reset)%C(bold green)(%ar)%C(reset) %C(dim white)%<(10,trunc)%an%C(reset)%C(auto)%d%C(reset)'
     ll = lg --branches --tags --remotes HEAD
     l = "!git lg HEAD `git origin-head`"
+    ls = l --first-parent
+    lls = ll --first-parent

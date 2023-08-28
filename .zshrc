@@ -63,7 +63,20 @@ autoload -Uz zmv
 if type "fzf" > /dev/null ; then
   source $HOME/.zsh/fzf/completion.zsh
   source $HOME/.zsh/fzf/key-bindings.zsh
-  if type "fd" > /dev/null ; then
+
+  if type "bfs" > /dev/null ; then
+    export FZF_CTRL_T_COMMAND="bfs -type f ."
+    export FZF_ALT_C_COMMAND="bfs -type d ."
+    _fzf_compgen_path() {
+      echo "$1"
+      command bfs -type f . "$1" \
+      | sed 's@^\./@@'
+    }
+    _fzf_compgen_dir() {
+       command bfs -type d . "$1" \
+       | sed 's@^\./@@'
+    }
+  elif type "fd" > /dev/null ; then
     export FZF_CTRL_T_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
     export FZF_ALT_C_COMMAND="fd -t d . --strip-cwd-prefix --hidden --follow --exclude .git"
     _fzf_compgen_path() {
